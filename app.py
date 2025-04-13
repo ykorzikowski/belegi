@@ -41,7 +41,7 @@ with col2:
 
 reason = st.text_input("Anlass der Bewirtung")
 date = st.date_input("Tag der Bewirtung")
-location = st.date_input("Ort der Bewirtung")
+location = st.text_input("Ort der Bewirtung")
 
 persons_str = st.text_area("Bewirtete Personen")
 persons = [p.strip() for p in persons_str.split("\n") if p.strip()]
@@ -65,6 +65,8 @@ btn_generate_pdf = st.button("Generiere Beleg", type="primary")
 if btn_generate_pdf:
     errors = []
 
+    if not location.strip():
+        errors.append("Bitte gib den Ort der Bewirtung an.")
     if not reason.strip():
         errors.append("Bitte gib den Anlass der Bewirtung an.")
     if len(persons) < 2:
