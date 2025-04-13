@@ -156,7 +156,7 @@ if btn_generate_pdf:
     c.setFont("Helvetica-Bold", 11)
     c.drawString(50, y, "Bewirtende Person:")
     c.setFont("Helvetica", 11)
-    c.drawString(180, y, location)
+    c.drawString(180, y, host)
 
     y -= line_spacing * 2
     c.setFont("Helvetica-Bold", 11)
