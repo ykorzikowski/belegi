@@ -15,7 +15,7 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
     menu_items={
         'Get Help': 'https://yannik.swokiz.com/contact',
-        'Report a bug': "https://yannik.swokiz.com/contact",
+        'Report a bug': "https://github.com/ykorzikowski/belegi/issues",
         'About': "# This is a header. This is an *extremely* cool app!"
     }
 )
