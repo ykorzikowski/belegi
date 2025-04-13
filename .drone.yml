@@ -1,0 +1,56 @@
+---
+
+kind: pipeline
+type: docker
+name: build
+
+steps:
+
+  - name: kaninko-build-prod
+    image: harbor.swokiz.dev/hub-proxy/plugins/kaniko
+    depends_on: [clone]
+    environment:
+      PLUGIN_CONFIG:
+        from_secret: image-swokiz-dev-json
+    settings:
+      repo: harbor.swokiz.dev/swokiz/bewirti
+      registry: harbor.swokiz.dev
+      dockerfile: Dockerfile
+
+  - name: deployment.
+    depends_on: [kaninko-build-prod]
+    image: harbor.swokiz.dev/hub-proxy/plugins/downstream
+    settings:
+      server: https://drone.swokiz.dev
+      token:
+        from_secret: drone-token
+      deploy: run-play
+      last_successful: true
+      params:
+        - PLAYBOOK=playbook-host-docker.yml
+        - LIMIT=lxc-bewirti
+      repositories:
+        - swokiz_infrastructure/ansible-proxmox-manage-vm@main
+
+  - name: code-analysis
+    image: harbor.swokiz.dev/hub-proxy/plugins/sonarqube-scanner:v2.4.1
+    failure: ignore
+    settings:
+      sonar_host: "https://sonar.swokiz.dev"
+      usingProperties: "true"
+      workspace: "/drone"
+      exclusions: "**/*.java"
+      sonar_key: "bewirti"
+      sonar_name: "bewirti"
+      sonar_token:
+        from_secret: sonar-token
+
+image_pull_secrets:
+  - image-swokiz-dev-json
+
+trigger:
+  ref:
+    exclude:
+      - refs/tags/*
+  branch:
+    - main
