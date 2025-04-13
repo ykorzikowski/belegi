@@ -1,4 +1,4 @@
-# Belegi
+# Bewirti
 
 Dieses Tool hilft dir dabei, schnell und unkompliziert einen professionellen Bewirtungsbeleg zu erstellen.
 Du kannst folgende Angaben machen:
