@@ -68,6 +68,8 @@ btn_generate_pdf = st.button("Generiere Beleg", type="primary")
 if btn_generate_pdf:
     errors = []
 
+    if not host.strip():
+        errors.append("Bitte gib den Bewirtenden an.")
     if not location.strip():
         errors.append("Bitte gib den Ort der Bewirtung an.")
     if not reason.strip():
