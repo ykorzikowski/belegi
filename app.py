@@ -6,6 +6,7 @@ from PIL import Image
 import io
 import tempfile
 import os
+import datetime
 
 st.set_page_config(
     page_title="Bewirti - Der Bewirtungsbeleg Buddy",
@@ -43,6 +44,8 @@ reason = st.text_input("Anlass der Bewirtung")
 date = st.date_input("Tag der Bewirtung")
 location = st.text_input("Ort der Bewirtung")
 
+host = st.text_input("Bewirtende Person")
+
 persons_str = st.text_area("Bewirtete Personen")
 persons = [p.strip() for p in persons_str.split("\n") if p.strip()]
 
@@ -69,8 +72,8 @@ if btn_generate_pdf:
         errors.append("Bitte gib den Ort der Bewirtung an.")
     if not reason.strip():
         errors.append("Bitte gib den Anlass der Bewirtung an.")
-    if len(persons) < 2:
-        errors.append("Bitte gib mindestens zwei bewirtete Personen an.")
+    if len(persons) < 1:
+        errors.append("Bitte gib mindestens eine bewirtete Personen an.")
     if not (took_picture or uploaded_file):
         errors.append("Bitte lade einen Beleg hoch oder nimm ein Foto auf.")
 
@@ -149,6 +152,12 @@ if btn_generate_pdf:
     c.setFont("Helvetica", 11)
     c.drawString(180, y, f"{total_amount:.2f} €")
 
+    y -= line_spacing
+    c.setFont("Helvetica-Bold", 11)
+    c.drawString(50, y, "Bewirtende Person:")
+    c.setFont("Helvetica", 11)
+    c.drawString(180, y, location)
+
     y -= line_spacing * 2
     c.setFont("Helvetica-Bold", 11)
     c.drawString(50, y, "Bewirtete Personen:")
@@ -161,8 +170,14 @@ if btn_generate_pdf:
 
     # Signature line
     signature_y = 100
+    c.setFont("Helvetica", 11)
+
+    # Unterschrift (left)
     c.line(50, signature_y, 250, signature_y)
     c.drawString(50, signature_y - 15, "Unterschrift")
+
+    # Datum (right)
+    c.drawRightString(width - 50, signature_y - 15, f"Datum: {date.strftime('%d.%m.%Y')}")
 
     # Footer note
     footer_text = "Dieser Beleg wurde erstellt mit Bewirti – Der Bewirtungsbeleg Buddy - bewirti.swokiz.com"
