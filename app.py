@@ -41,6 +41,7 @@ with col2:
 
 reason = st.text_input("Anlass der Bewirtung")
 date = st.date_input("Tag der Bewirtung")
+location = st.date_input("Ort der Bewirtung")
 
 persons_str = st.text_area("Bewirtete Personen")
 persons = [p.strip() for p in persons_str.split("\n") if p.strip()]
@@ -121,6 +122,12 @@ if btn_generate_pdf:
     c.drawString(50, y, "Tag der Bewirtung:")
     c.setFont("Helvetica", 11)
     c.drawString(180, y, date.strftime('%d.%m.%Y'))
+
+    y -= line_spacing
+    c.setFont("Helvetica-Bold", 11)
+    c.drawString(50, y, "Ort der Bewirtung:")
+    c.setFont("Helvetica", 11)
+    c.drawString(180, y, location)
 
     y -= line_spacing
     c.setFont("Helvetica-Bold", 11)
